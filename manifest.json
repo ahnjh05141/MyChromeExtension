@@ -1,17 +1,17 @@
 {
     "manifest_version": 3,
-    "name": "Side Panel Extension",
+    "name": "Webcam Side Panel",
     "version": "1.0",
-    "description": "현재 웹사이트 주소를 표시하는 사이드 패널 확장 프로그램",
-    "action": {
-      "default_icon": "icon.png"
-    },
+    "description": "실시간 웹캠 화면을 사이드 패널에 표시하는 익스텐션",
+    "permissions": ["sidePanel", "storage", "tabs"],
+    "host_permissions": ["<all_urls>"],
     "background": {
       "service_worker": "background.js"
     },
     "side_panel": {
       "default_path": "sidepanel.html"
     },
-    "permissions": ["sidePanel", "storage", "activeTab"],
-    "host_permissions": ["<all_urls>"]
+    "action": {
+      "default_title": "웹캠 보기"
+    }
   }

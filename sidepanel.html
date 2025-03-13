@@ -1,40 +1,17 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>프로그래머스 관련 탭</title>
-    <style>
-        body {
-            width: 100vw;
-            height: 100vh;
-            background-color: #f0f0f0;
-            padding: 20px;
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-            box-sizing: border-box;
-        }
-        h1 {
-            text-align: center;
-            font-size: 22px;
-        }
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-        li {
-            background: #fff;
-            margin: 5px 0;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Webcam Panel</title>
+  <style>
+    body { margin: 0; padding: 0; text-align: center; background: #222; color: white; }
+    video { width: 100%; height: auto; }
+  </style>
 </head>
 <body>
-    <h1>프로그래머스 관련 열린 탭</h1>
-    <ul id="tabs-list">탭 정보를 불러오는 중...</ul>
-    <script src="sidepanel.js"></script>
+  <h2>📷 실시간 웹캠</h2>
+  <video id="webcam" autoplay playsinline></video>
+  <script src="sidepanel.js"></script>
 </body>
 </html>

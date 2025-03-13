@@ -1,40 +1,43 @@
-document.addEventListener("DOMContentLoaded", async () => {
-    const tabsList = document.getElementById("tabs-list");
-
-    console.log("🔹 프로그래머스 관련 열린 탭 목록 불러오기 시작");
-
-    function updateUI() {
-        // 기존 목록 초기화
-        tabsList.innerHTML = "<li>탭 정보를 불러오는 중...</li>";
-
-        // 저장된 프로그래머스 관련 탭 정보 가져오기
-        chrome.storage.local.get("programmersTabs", (result) => {
-            if (!result.programmersTabs || result.programmersTabs.length === 0) {
-                console.log("❌ 프로그래머스 관련 열린 탭이 없음");
-                tabsList.innerHTML = "<li>현재 프로그래머스 관련 열린 탭이 없습니다.</li>";
-                return;
-            }
-
-            console.log("✅ 저장된 프로그래머스 탭 목록:", result.programmersTabs);
-
-            // 리스트 초기화
-            tabsList.innerHTML = "";
-
-            // 모든 필터링된 탭 정보를 리스트로 추가
-            result.programmersTabs.forEach(tab => {
-                const li = document.createElement("li");
-                li.textContent = tab.title || "제목 없음"; // 탭 제목이 없으면 "제목 없음" 표시
-                tabsList.appendChild(li);
-            });
-        });
+document.addEventListener("DOMContentLoaded", () => {
+    const video = document.getElementById("webcam");
+  
+    async function startWebcam() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.srcObject = stream;
+      } catch (err) {
+        console.error("웹캠 접근 불가:", err);
+        alert(`웹캠 접근이 거부되었습니다. 브라우저 권한을 확인하세요!\n에러 메시지: ${err.message}`);
+      }
     }
-
-    // UI 업데이트 실행
-    updateUI();
-
-    // storage 변경 감지하여 UI 자동 업데이트
-    chrome.storage.onChanged.addListener(() => {
-        console.log("🔄 저장된 데이터 변경 감지됨, UI 업데이트");
-        updateUI();
+  
+    async function requestPermission() {
+      return new Promise((resolve) => {
+        chrome.tabs.create({ url: "camera_permission.html", active: true });
+  
+        const checkPermission = setInterval(() => {
+          chrome.storage.local.get("cameraPermission", (result) => {
+            if (result.cameraPermission === true) {
+              clearInterval(checkPermission);
+              chrome.storage.local.remove("cameraPermission"); // 권한 값 초기화
+              resolve();
+            }
+          });
+        }, 1000);
+      });
+    }
+  
+    const permissionButton = document.createElement("button");
+    permissionButton.innerText = "📸 웹캠 활성화";
+    permissionButton.style.padding = "10px";
+    permissionButton.style.marginTop = "10px";
+    permissionButton.style.fontSize = "16px";
+  
+    permissionButton.addEventListener("click", async () => {
+      permissionButton.remove();
+      await requestPermission(); // 새 탭에서 권한 요청 후 승인되면 실행
+      await startWebcam();
     });
-});
+  
+    document.body.appendChild(permissionButton);
+  });

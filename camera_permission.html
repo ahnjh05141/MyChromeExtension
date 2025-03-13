@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>카메라 권한 요청</title>
+  <style>
+    body { text-align: center; font-family: Arial, sans-serif; margin-top: 50px; }
+    button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h2>📸 카메라 권한 요청</h2>
+  <p>익스텐션에서 카메라를 사용하려면 아래 버튼을 눌러 허용해주세요.</p>
+  <button id="requestPermission">카메라 허용</button>
+
+  <script>
+    document.getElementById("requestPermission").addEventListener("click", async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        stream.getTracks().forEach(track => track.stop()); // 스트림 정리
+
+        // 카메라 권한 승인 여부를 저장
+        chrome.storage.local.set({ cameraPermission: true }, () => {
+          console.log("카메라 권한 승인됨!");
+          window.close(); // 권한 승인 후 탭 닫기
+        });
+      } catch (err) {
+        console.error("카메라 권한 요청 실패:", err);
+        alert("카메라 권한을 허용해주세요!");
+      }
+    });
+  </script>
+</body>
+</html>
